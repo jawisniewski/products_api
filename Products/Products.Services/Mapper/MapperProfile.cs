@@ -15,7 +15,7 @@ namespace Products.Services.Mapper
     {
         public MapperProfile()
         {
-            CreateMap<ProductDto, Product>().ReverseMap();
+            CreateMap<Product, ProductDto>();
         }
     }
 }

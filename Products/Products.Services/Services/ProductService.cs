@@ -41,10 +41,8 @@ namespace Products.Services.Services
         {
             var result = await _productRepository.GetListAsync(pageNumber, pageSize).ConfigureAwait(false);
 
-            if (result.IsFailure)
-            {
-                return Result<IEnumerable<ProductDto>>.Failure(result.Error);
-            }
+            if (result.IsFailure)            
+                return Result<IEnumerable<ProductDto>>.Failure(result.Error);            
 
             var products =  _mapper.Map<IEnumerable<ProductDto>>(result.Value);
             

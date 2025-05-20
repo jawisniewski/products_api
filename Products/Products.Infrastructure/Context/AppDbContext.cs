@@ -27,11 +27,11 @@ namespace Products.Infrastructure.Context
                     .IsRequired()
                     .HasMaxLength(300);
 
-                r.Property(r => r.Code)
+                r.Property(r => r.Code)                    
                     .IsRequired()
                     .HasMaxLength(300);
 
-                r.HasIndex(u => u.Name)
+                r.HasIndex(u => u.Code)
                     .IsUnique();
             });
         }

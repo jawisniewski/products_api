@@ -10,7 +10,7 @@ namespace Products.Services.Interfaces.Repositories
 {
     public interface IProductRepository
     {
-        public Task<Result> CreateAsync(Product product);
+        public Task<Result<Guid>> CreateAsync(Product product);
         public Task<Result<IEnumerable<Product>>> GetListAsync(int pageNumber, int pageSize);
     }
 }

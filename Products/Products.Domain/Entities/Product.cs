@@ -26,7 +26,7 @@ namespace Products.Domain.Entities
 
             if (validateResult.IsFailure)
             {
-                return (Result<Product>) validateResult;
+                return Result<Product>.Failure(validateResult.Error);
             }
 
             return Result<Product>.Success(product);
@@ -54,14 +54,14 @@ namespace Products.Domain.Entities
 
         private Result ValidatePrice()
         {
-            if (Price < 0)
+            if (Price <= 0)
             {
-                return Result.Failure("Price cannot be negative");
+                return Result.Failure("Price must be positive number");
             }
 
             if (!Price.HasMaximumTwoDecimalPlaces())
             {
-                return Result.Failure("Price cannot have more then 2 places");
+                return Result.Failure("Price cannot have more then 2 places after comma");
             }
 
             return Result.Success();
