@@ -100,7 +100,7 @@ namespace Products.Domain.Entities
 
             if (Name.Length > 200)
             {
-                return Result.Failure("NAME_ERROR   ");
+                return Result.Failure("NAME_ERROR");
             }
 
             return Result.Success();

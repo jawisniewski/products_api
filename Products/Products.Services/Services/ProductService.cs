@@ -5,11 +5,6 @@ using Products.Domain.Entities;
 using Products.Services.DTOs.Products;
 using Products.Services.Interfaces.Repositories;
 using Products.Services.Interfaces.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Products.Services.Services
 {
