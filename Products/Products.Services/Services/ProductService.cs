@@ -37,16 +37,29 @@ namespace Products.Services.Services
             return await _productRepository.CreateAsync(productResult.Value).ConfigureAwait(false);
         }
 
-        public async Task<Result<IEnumerable<ProductDto>>> GetListAsync(int pageNumber, int pageSize)
+        public async Task<Result<ProductGetListResponse>> GetListAsync(int pageNumber, int pageSize)
         {
             var result = await _productRepository.GetListAsync(pageNumber, pageSize).ConfigureAwait(false);
 
             if (result.IsFailure)            
-                return Result<IEnumerable<ProductDto>>.Failure(result.Error);            
+                return Result<ProductGetListResponse>.Failure(result.Error);            
 
             var products =  _mapper.Map<IEnumerable<ProductDto>>(result.Value);
             
-            return Result<IEnumerable<ProductDto>>.Success(products);
+            var getProductsCount = await _productRepository.GetCountAsync().ConfigureAwait(false);
+
+            if (getProductsCount.IsFailure)
+            {
+                return Result<ProductGetListResponse>.Failure(getProductsCount.Error);
+            }
+
+            var response = new ProductGetListResponse
+            {
+                Total = getProductsCount.Value,
+                Products = products
+            };
+
+            return Result<ProductGetListResponse>.Success(response);
         }
     }
 }

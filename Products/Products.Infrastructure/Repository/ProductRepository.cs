@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Products.Domain.Extensions;
 namespace Products.Infrastructure.Repository
 {
     public class ProductRepository : IProductRepository
@@ -32,6 +32,10 @@ namespace Products.Infrastructure.Repository
         {
             try
             {
+                if(_dbSet.Any(x => x.Code.IsEqual(product.Code)))
+                {
+                    return Result<Guid>.Failure("PRODUCT_CODE_ALREADY_EXISTS");
+                }
                 await _dbSet.AddAsync(product)
                     .ConfigureAwait(false);
 
@@ -44,7 +48,7 @@ namespace Products.Infrastructure.Repository
             {
                 _logger.LogError(ex, "Error creating product");
 
-                return Result<Guid>.Failure("Error creating product");
+                return Result<Guid>.Failure("CREATING_ERROR");
             }
         }
 
@@ -53,8 +57,9 @@ namespace Products.Infrastructure.Repository
             try
             {
                 var result = await _dbSet
-                    .Skip(pageSize * (pageNumber - 1))
+                    .Skip(pageSize * pageNumber)
                     .Take(pageSize)
+                    .AsNoTracking()
                     .ToListAsync()
                     .ConfigureAwait(false);
 
@@ -64,9 +69,25 @@ namespace Products.Infrastructure.Repository
             {
                 _logger.LogError(ex, "Error getting list");
 
-                return Result<IEnumerable<Product>>.Failure(ex.Message);
+                return Result<IEnumerable<Product>>.Failure("GET_ERROR");
             }
 
+        }
+
+        public async Task<Result<int>> GetCountAsync()
+        {
+            try
+            {
+                var result = await _dbSet.CountAsync()
+                    .ConfigureAwait(false);
+
+                return Result<int>.Success(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GET_ERROR");
+                return Result<int>.Failure("GET_ERROR");
+            }
         }
     }
 }

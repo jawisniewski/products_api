@@ -12,5 +12,6 @@ namespace Products.Services.Interfaces.Repositories
     {
         public Task<Result<Guid>> CreateAsync(Product product);
         public Task<Result<IEnumerable<Product>>> GetListAsync(int pageNumber, int pageSize);
+        public Task<Result<int>> GetCountAsync();
     }
 }

@@ -78,7 +78,8 @@ namespace Products.API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-            app.UseMiddleware<ApiKeyMiddleware>();
+            app.UseRouting();
+            //app.UseMiddleware<ApiKeyMiddleware>();
 
             app.MapControllers();
             app.UseCors("AllowAllOrigins");

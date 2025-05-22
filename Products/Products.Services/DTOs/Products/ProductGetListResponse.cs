@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Products.Services.DTOs.Products
 {
-    public class ProductGetListRequest
+    public class ProductGetListResponse
     {
-        public int PageIndex { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
+        public required IEnumerable<ProductDto> Products { get; set; }
+        public int Total { get; set; }
     }
 }

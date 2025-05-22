@@ -7,22 +7,22 @@ namespace Products.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ProductController : ControllerBase
+    public class ProductsController : ControllerBase
     {
-        private readonly ILogger<ProductController> _logger;
+        private readonly ILogger<ProductsController> _logger;
         private readonly IProductService _productService;
 
-        public ProductController(ILogger<ProductController> logger, IProductService productService)
+        public ProductsController(ILogger<ProductsController> logger, IProductService productService)
         {
             _logger = logger;
             _productService = productService;
         }
 
-        [HttpGet(Name = "GetList")]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> Get([FromQuery] ProductGetListRequest productGetListRequest)
+        [HttpGet("GetList")]
+        public async Task<ActionResult<ProductGetListResponse>> GetList([FromQuery] ProductGetListRequest productGetListRequest)
         {
-            var result = await _productService.GetListAsync(productGetListRequest.PageNumber, productGetListRequest.PageSize);
-            
+            var result = await _productService.GetListAsync(productGetListRequest.PageIndex, productGetListRequest.PageSize);
+
             if (result.IsFailure)
             {
                 return BadRequest(result.Error);
@@ -31,7 +31,7 @@ namespace Products.API.Controllers
             return Ok(result.Value);
         }
 
-        [HttpPost(Name = "Create")]
+        [HttpPost("Create")]
         public async Task<ActionResult> Create([FromBody] ProductDto product)
         {
             var createResult = await _productService.CreateAsync(product);
