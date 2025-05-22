@@ -26,7 +26,7 @@ namespace Products.Domain.Entities
 
             if (validateResult.IsFailure)
             {
-                return Result<Product>.Failure(validateResult.Error);
+                return Result<Product>.Failure(validateResult.ErrorCode);
             }
 
             return Result<Product>.Success(product);
@@ -56,12 +56,12 @@ namespace Products.Domain.Entities
         {
             if (Price <= 0)
             {
-                return Result.Failure("Price must be positive number");
+                return Result.Failure("PRICE_ERROR");
             }
 
             if (!Price.HasMaximumTwoDecimalPlaces())
             {
-                return Result.Failure("Price cannot have more then 2 places after comma");
+                return Result.Failure("PRICE_COMMA_ERROR");
             }
 
             return Result.Success();
@@ -71,17 +71,17 @@ namespace Products.Domain.Entities
         {
             if (string.IsNullOrEmpty(Code))
             {
-                return Result.Failure("Code cannot be empty");
+                return Result.Failure("CODE_EMPTY");
             }
 
             if (Code.Length < 3)
             {
-                return Result.Failure("Code must be at least 3 characters long");
+                return Result.Failure("CODE_ERROR");
             }
 
             if (Code.Length > 200)
             {
-                return Result.Failure("Code must be at most 200 characters long");
+                return Result.Failure("CODE_ERROR");
             }
             return Result.Success();
         }
@@ -90,17 +90,17 @@ namespace Products.Domain.Entities
         {
             if (string.IsNullOrWhiteSpace(Name))
             {
-                return Result.Failure("Name cannot be empty");
+                return Result.Failure("NAME_EMPTY");
             }
 
             if (Name.Length < 3)
             {
-                return Result.Failure("Name must be at least 3 characters long");
+                return Result.Failure("NAME_ERROR");
             }
 
             if (Name.Length > 200)
             {
-                return Result.Failure("Name must be at most 200 characters long");
+                return Result.Failure("NAME_ERROR   ");
             }
 
             return Result.Success();

@@ -42,7 +42,7 @@ namespace Products.Services.Services
             var result = await _productRepository.GetListAsync(pageNumber, pageSize).ConfigureAwait(false);
 
             if (result.IsFailure)            
-                return Result<ProductGetListResponse>.Failure(result.Error);            
+                return Result<ProductGetListResponse>.Failure(result.ErrorCode);            
 
             var products =  _mapper.Map<IEnumerable<ProductDto>>(result.Value);
             
@@ -50,7 +50,7 @@ namespace Products.Services.Services
 
             if (getProductsCount.IsFailure)
             {
-                return Result<ProductGetListResponse>.Failure(getProductsCount.Error);
+                return Result<ProductGetListResponse>.Failure(getProductsCount.ErrorCode);
             }
 
             var response = new ProductGetListResponse

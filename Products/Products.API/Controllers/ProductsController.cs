@@ -25,7 +25,7 @@ namespace Products.API.Controllers
 
             if (result.IsFailure)
             {
-                return BadRequest(result.Error);
+                return BadRequest(result.ErrorCode);
             }
 
             return Ok(result.Value);
@@ -38,7 +38,7 @@ namespace Products.API.Controllers
 
             if (createResult.IsFailure)
             {
-                return BadRequest(createResult.Error);
+                return BadRequest(createResult.ErrorCode);
             }
 
             return CreatedAtAction(nameof(Create), new { id = ((Result<Guid>)createResult).Value }, product);

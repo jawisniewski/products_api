@@ -10,12 +10,12 @@ namespace Products.Domain.Common
     {
         public bool IsSuccess { get; protected set; }
         public bool IsFailure => !IsSuccess;
-        public string Error { get; protected set; }
+        public string ErrorCode { get; protected set; }
 
         protected Result(bool isSuccess, string error)
         {
             IsSuccess = isSuccess;
-            Error = error;
+            ErrorCode = error;
         }
 
         public static Result Success() => new(true, string.Empty);
