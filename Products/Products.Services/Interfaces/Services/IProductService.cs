@@ -1,4 +1,4 @@
-﻿using Products.Domain.Common;
+﻿using Products.Services.Common;
 using Products.Services.DTOs;
 using Products.Services.DTOs.Products;
 using System;

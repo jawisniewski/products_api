@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Products.Domain.Common
+namespace Products.Services.Common
 {
     public class Result
     {

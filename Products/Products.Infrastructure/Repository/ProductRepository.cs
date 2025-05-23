@@ -1,18 +1,11 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Products.Domain.Common;
 using Products.Domain.Entities;
 using Products.Infrastructure.Context;
-using Products.Services.DTOs.Products;
 using Products.Services.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Products.Domain.Extensions;
+using Products.Services.Common;
+
 namespace Products.Infrastructure.Repository
 {
     public class ProductRepository : IProductRepository
