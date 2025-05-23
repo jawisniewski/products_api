@@ -1,12 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Products.Services.Interfaces.Repositories;
 using Products.Services.Interfaces.Services;
 using Products.Services.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Products.Services.DI
 {
