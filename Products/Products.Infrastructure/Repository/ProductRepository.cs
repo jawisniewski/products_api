@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Products.Domain.Common;
 using Products.Domain.Entities;
 using Products.Infrastructure.Context;
 using Products.Services.Interfaces.Repositories;
 using Products.Domain.Extensions;
+using Products.Services.Common;
 
 namespace Products.Infrastructure.Repository
 {
