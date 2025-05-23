@@ -1,11 +1,5 @@
-﻿using Products.Domain.Common;
-using Products.Services.DTOs;
+﻿using Products.Services.Common;
 using Products.Services.DTOs.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Products.Services.Interfaces.Services
 {
