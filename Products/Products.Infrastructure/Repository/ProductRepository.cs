@@ -1,11 +1,13 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Products.Domain.Common;
 using Products.Domain.Entities;
 using Products.Infrastructure.Context;
 using Products.Domain.Extensions;
 using Products.Domain.Interfaces.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Products.Infrastructure.Repository
 {
@@ -22,31 +24,28 @@ namespace Products.Infrastructure.Repository
             _dbSet = context.Set<Product>();
         }
 
-        public async Task<Result<Guid>> CreateAsync(Product product)
+        public async Task<Guid> CreateAsync(Product product)
         {
             try
             {
-                if(_dbSet.Any(x => x.Code.IsEqual(product.Code)))
+                if (_dbSet.Any(x => x.Code.IsEqual(product.Code)))
                 {
-                    return Result<Guid>.Failure("PRODUCT_CODE_ALREADY_EXISTS");
+                    throw new InvalidOperationException("PRODUCT_CODE_ALREADY_EXISTS");
                 }
-                await _dbSet.AddAsync(product)
-                    .ConfigureAwait(false);
 
-                await _context.SaveChangesAsync()
-                    .ConfigureAwait(false);
+                await _dbSet.AddAsync(product).ConfigureAwait(false);
+                await _context.SaveChangesAsync().ConfigureAwait(false);
 
-                return Result<Guid>.Success(product.Id);
+                return product.Id;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error creating product");
-
-                return Result<Guid>.Failure("CREATING_ERROR");
+                throw;
             }
         }
 
-        public async Task<Result<IEnumerable<Product>>> GetListAsync(int pageNumber, int pageSize)
+        public async Task<IEnumerable<Product>> GetListAsync(int pageNumber, int pageSize)
         {
             try
             {
@@ -57,30 +56,26 @@ namespace Products.Infrastructure.Repository
                     .ToListAsync()
                     .ConfigureAwait(false);
 
-                return Result<IEnumerable<Product>>.Success(result);
+                return result;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error getting list");
-
-                return Result<IEnumerable<Product>>.Failure("GET_ERROR");
+                throw;
             }
-
         }
 
-        public async Task<Result<int>> GetCountAsync()
+        public async Task<int> GetCountAsync()
         {
             try
             {
-                var result = await _dbSet.CountAsync()
-                    .ConfigureAwait(false);
-
-                return Result<int>.Success(result);
+                var result = await _dbSet.CountAsync().ConfigureAwait(false);
+                return result;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GET_ERROR");
-                return Result<int>.Failure("GET_ERROR");
+                throw;
             }
         }
     }
