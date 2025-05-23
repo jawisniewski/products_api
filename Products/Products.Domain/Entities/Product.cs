@@ -1,5 +1,5 @@
-﻿using Products.Domain.Extensions;
-using System;
+﻿using Products.Domain.Common;
+using Products.Domain.Extensions;
 
 namespace Products.Domain.Entities
 {
@@ -18,59 +18,92 @@ namespace Products.Domain.Entities
         public string Name { get; private set; }
         public decimal Price { get; private set; }
 
-        public static Product Create(string name, string code, decimal price)
+        public static Result<Product> Create(string name, string code, decimal price)
         {
             var product = new Product(code, name, price);
 
-            product.Validate();
+            var validateResult = product.Validate();
 
-            return product;
+            if (validateResult.IsFailure)
+            {
+                return Result<Product>.Failure(validateResult.ErrorCode);
+            }
+
+            return Result<Product>.Success(product);
         }
 
-        private void Validate()
+        private Result Validate()
         {
-            ValidateName();
-            ValidateCode();
-            ValidatePrice();
+            var validateNameResult = ValidateName();
+
+            if (validateNameResult.IsFailure)
+                return validateNameResult;
+
+            var validateCodeResult = ValidateCode();
+
+            if (validateCodeResult.IsFailure)
+                return validateCodeResult;
+
+            var validatePriceResult = ValidatePrice();
+
+            if(validatePriceResult.IsFailure)
+                return validatePriceResult;
+
+            return Result.Success();
         }
 
-        private void ValidatePrice()
+        private Result ValidatePrice()
         {
             if (Price <= 0)
             {
-                throw new ArgumentException("PRICE_ERROR");
+                return Result.Failure("PRICE_ERROR");
             }
 
             if (!Price.HasMaximumTwoDecimalPlaces())
             {
-                throw new ArgumentException("PRICE_COMMA_ERROR");
+                return Result.Failure("PRICE_COMMA_ERROR");
             }
+
+            return Result.Success();
         }
 
-        private void ValidateCode()
+        private Result ValidateCode()
         {
             if (string.IsNullOrEmpty(Code))
             {
-                throw new ArgumentException("CODE_EMPTY");
+                return Result.Failure("CODE_EMPTY");
             }
 
-            if (Code.Length < 3 || Code.Length > 200)
+            if (Code.Length < 3)
             {
-                throw new ArgumentException("CODE_ERROR");
+                return Result.Failure("CODE_ERROR");
             }
+
+            if (Code.Length > 200)
+            {
+                return Result.Failure("CODE_ERROR");
+            }
+            return Result.Success();
         }
 
-        private void ValidateName()
+        private Result ValidateName()
         {
             if (string.IsNullOrWhiteSpace(Name))
             {
-                throw new ArgumentException("NAME_EMPTY");
+                return Result.Failure("NAME_EMPTY");
             }
 
-            if (Name.Length < 3 || Name.Length > 200)
+            if (Name.Length < 3)
             {
-                throw new ArgumentException("NAME_ERROR");
+                return Result.Failure("NAME_ERROR");
             }
+
+            if (Name.Length > 200)
+            {
+                return Result.Failure("NAME_ERROR   ");
+            }
+
+            return Result.Success();
         }
     }
 }

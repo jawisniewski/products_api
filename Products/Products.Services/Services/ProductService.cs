@@ -1,10 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Products.Domain.Common;
 using Products.Domain.Entities;
-using Products.Services.Common;
 using Products.Services.DTOs.Products;
 using Products.Services.Interfaces.Repositories;
 using Products.Services.Interfaces.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Products.Services.Services
 {
@@ -20,20 +25,16 @@ namespace Products.Services.Services
             _mapper = mapper;
         }
 
-        public async Task<Result> CreateAsync(ProductDto productDto)
+        public async Task<Result> CreateAsync(ProductDto product)
         {
-            try
-            {
-                var productResult = Product.Create(productDto.Name, productDto.Code, productDto.Price);
+            var productResult = Product.Create(product.Name, product.Code, product.Price);
 
-                return await _productRepository.CreateAsync(productResult).ConfigureAwait(false);
-            }
-            catch (ArgumentException ex)
+            if (productResult.IsFailure)
             {
-                _logger.LogError(ex, "Error creating product");
-                return Result.Failure(ex.Message);
+                return productResult;
             }
 
+            return await _productRepository.CreateAsync(productResult.Value).ConfigureAwait(false);
         }
 
         public async Task<Result<ProductGetListResponse>> GetListAsync(int pageNumber, int pageSize)

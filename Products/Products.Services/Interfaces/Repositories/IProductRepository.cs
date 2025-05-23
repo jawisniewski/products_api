@@ -1,5 +1,5 @@
-﻿using Products.Domain.Entities;
-using Products.Services.Common;
+﻿using Products.Domain.Common;
+using Products.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
